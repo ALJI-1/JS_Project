@@ -40,6 +40,13 @@
             "name": "React Chrome",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}"
+          },
+          {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Edge index.html",
+            "url": "http://localhost:5502/${relativeFileDirname}/index.html",
+            "webRoot": "${workspaceFolder}"
           }
     ]
 }

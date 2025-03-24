@@ -5,16 +5,12 @@ const url = "https://seido-webservice-307d89e1f16a.azurewebsites.net/api";
 const listOfItems = document.querySelector('#list-of-items');
 const nextButton = document.querySelector('#next-btn');
 const previousButton = document.querySelector('#prev-btn');
+const pageInfo = document.querySelector('#page-info');
 
 let currentPage = 1;
 const itemsPerPage = 10;
 let pageCount = 0;
-let nextBtn;
-const pageInfo = document.querySelector('#page-info') || document.createElement('div');
-if (!document.querySelector('#page-info')) {
-    pageInfo.id = 'page-info';
-    document.body.appendChild(pageInfo);
-}
+
 async function myFetch(url, method = null, body = null) {
     try {
         method ??= 'GET';
@@ -27,18 +23,25 @@ async function myFetch(url, method = null, body = null) {
             console.log(`${method} Request successful @ ${url}`);
             let data = await res.json();
             return data;
-        } else {
+        } 
+        else {
             console.log(`Failed to receive data from server: ${res.status}`);
             alert(`Failed to receive data from server: ${res.status}`);
+            return null;
         }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
         console.log(`Failed to receive data from server: ${err.message}`);
         alert(`Failed to receive data from server: ${err.message}`);
+        return null;
     }
 }
 
-async function getMusicGroups(page = currentPage) {
-    const reqUrl = `${url}/MusicGroup/Read?flat=false&pageNr=${page}&pageSize=${itemsPerPage}`;
+
+async function getMusicGroups() {
+    const pageNr = currentPage - 1;
+    const reqUrl = `${url}/MusicGroup/Read?flat=false&pageNr=${pageNr}&pageSize=${itemsPerPage}`;
     const data = await myFetch(reqUrl);
     if (data) {
         pageCount = data.pageCount;
@@ -46,7 +49,7 @@ async function getMusicGroups(page = currentPage) {
         pageInfo.textContent = `Sida ${currentPage} av ${pageCount}`;
         previousButton.disabled = currentPage === 1;
         nextButton.disabled = currentPage === pageCount;
-    }
+    } 
 }
 
 function fillList(musicGroups) {
@@ -67,19 +70,33 @@ function clearList() {
         listOfItems.removeChild(listOfItems.firstChild);
     }
 }
-function updateByButtons() {
-    previousButton.disabled = currentPage === 1;
-    nextButton.disabled = currentPage >= pageCount;
-}
+
 nextButton.addEventListener('click', () => {
-    currentPage++;
-    getMusicGroups();
+    if (currentPage < pageCount) {
+        currentPage++;
+        getMusicGroups();
+    }
 });
 
 previousButton.addEventListener('click', () => {
-    currentPage--;
-    getMusicGroups(currentPage);
+    if (currentPage > 1) {
+        currentPage--;
+        getMusicGroups();
+    }
 });
+function searchMusicGroups() {
+    const searchInput = document.getElementById('search-input').value.toLowerCase();
+    const reqUrl = `${url}/MusicGroup/Read?flat=true`;
+    myFetch(reqUrl)
+        .then(data => {
+            if (data) {
+                const filteredGroups = data.pageItems.filter(group =>
+                    group.name.toLowerCase().includes(searchInput)
+                );
+                fillList(filteredGroups);
+            }
+        });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     getMusicGroups(currentPage);
