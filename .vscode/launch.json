@@ -17,21 +17,21 @@
             "type": "chrome",
             "request": "launch",
             "name": "Chrome index.html",
-            "url": "http://localhost:5502/${relativeFileDirname}/index.html",
+            "url": "http://localhost:5500/${relativeFileDirname}/index.html",
             "webRoot": "${workspaceFolder}"
         },
         {
             "type": "chrome",
             "request": "launch",
             "name": "Chrome ../index.html",
-            "url": "http://localhost:5502/${relativeFileDirname}/../index.html",
+            "url": "http://localhost:5500/${relativeFileDirname}/../index.html",
             "webRoot": "${workspaceFolder}"
         },
         {
             "type": "chrome",
             "request": "launch",
             "name": "AppFinal",
-            "url": "http://localhost:5502/${relativeFileDirname}/../table.html",
+            "url": "http://localhost:5500/${relativeFileDirname}/../table.html",
             "webRoot": "${workspaceFolder}"
         },
         {
