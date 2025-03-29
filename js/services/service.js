@@ -10,7 +10,8 @@ export function musicService(baseUrl) {
             method ??= 'GET'; 
             let res = await fetch(url, {
                 method: method,
-                headers: { 'content-type': 'application/json' },
+                headers: { 'content-type': 'application/json',
+                    'User-Agent': 'YourAppName/1.0', },
                 body: body ? JSON.stringify(body) : null 
             });
     

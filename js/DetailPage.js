@@ -7,9 +7,13 @@ const _service = new musicService(url);
 document.addEventListener('DOMContentLoaded', async () => {
     const albumList = document.querySelector('#listOfAlbums');
     const artistList = document.querySelector('#listOfArtists');
+    const groupName = document.querySelector('#bandName');
+    const genre = document.querySelector('#musicGenre');
+    const established = document.querySelector('#establishedYear');
 
     console.log('Album List:', albumList); // Debugging
     console.log('Artist List:', artistList); // Debugging
+    
 
     if (!albumList || !artistList) {
         console.error('One or both elements (#listOfAlbums, #listOfArtists) are missing in the DOM.');
@@ -37,6 +41,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         console.log('Group Details:', groupDetails);
+
+       
+        
+        groupName.value = groupDetails.name || 'N/A';
+        genre.value = groupDetails.strGenre || 'N/A';
+        established.value = groupDetails.establishedYear || 'N/A';
+
+   
+
+
+
 
         // Populate the artist list
         if (groupDetails.artists && Array.isArray(groupDetails.artists)) {
