@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const groupId = new URLSearchParams(window.location.search).get('id');
     if (!groupId) {
         alert('Hittade ingen grupp som matchar id: ' + groupId);
-        window.location.href = 'ListPage.html'; // Redirect to a fallback page
+        window.location.href = 'ListPage.html'; 
         return;
     }
     try {
-        // Fetch group details using the appropriate service function
+       
         const groupDetails = await _service.readMusicGroupAsync(groupId, false);
 
         if (!groupDetails || Object.keys(groupDetails).length === 0) {
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         genre.value = groupDetails.strGenre || 'N/A';
         established.value = groupDetails.establishedYear || 'N/A';
 
-        // Populate the artist list
+   
         if (groupDetails.artists && Array.isArray(groupDetails.artists)) {
             groupDetails.artists.forEach((artist, index) => {
                 const li = document.createElement('li');
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             artistList.appendChild(li);
         }
 
-        // Populate the album list
+      
         if (groupDetails.albums && Array.isArray(groupDetails.albums)) {
             groupDetails.albums.forEach((album, index) => {
                 const li = document.createElement('li');
