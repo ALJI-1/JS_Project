@@ -1,4 +1,4 @@
-// js/ListPage.js (assuming testScript.js is your ListPage.js)
+
 'use strict';
 
 import { musicService } from './services/service.js';
@@ -19,11 +19,11 @@ let pageCount = 0;
 searchButton.addEventListener('click', clickHandlerSearch);
 
 async function clickHandlerSearch(event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault();
     const searchInput = document.getElementById('search-input').value.toLowerCase();
 
     try {
-        currentPage = 1; // Reset to the first page for new search
+        currentPage = 1; 
         const data = await api.readMusicGroupsAsync(currentPage - 1, false, searchInput, itemsPerPage);
 
         if (data) {
@@ -33,7 +33,7 @@ async function clickHandlerSearch(event) {
             previousButton.disabled = currentPage === 1;
             nextButton.disabled = currentPage === pageCount;
 
-            // Store the search input for pagination
+            
             nextButton.dataset.searchQuery = searchInput;
             previousButton.dataset.searchQuery = searchInput;
         } else {
@@ -41,7 +41,6 @@ async function clickHandlerSearch(event) {
             pageInfo.textContent = 'Inga resultat hittades.';
         }
     } catch (error) {
-        console.error('Error fetching data:', error);
         clearList();
         pageInfo.textContent = 'Ett fel inträffade vid hämtning av data.';
     }

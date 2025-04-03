@@ -11,47 +11,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     const genre = document.querySelector('#musicGenre');
     const established = document.querySelector('#establishedYear');
 
-    console.log('Album List:', albumList); // Debugging
-    console.log('Artist List:', artistList); // Debugging
-    
-
-    if (!albumList || !artistList) {
-        console.error('One or both elements (#listOfAlbums, #listOfArtists) are missing in the DOM.');
-        return;
-    }
-
     const groupId = new URLSearchParams(window.location.search).get('id');
     if (!groupId) {
-        console.error('No groupId found in the URL.');
-        alert('No groupId found in the URL.');
+        alert('Hittade ingen grupp som matchar id: ' + groupId);
         window.location.href = 'ListPage.html'; // Redirect to a fallback page
         return;
     }
-
-    console.log(`Requesting data for groupId: ${groupId}`);
-
     try {
         // Fetch group details using the appropriate service function
         const groupDetails = await _service.readMusicGroupAsync(groupId, false);
-        console.log('Group Details:', groupDetails);
+
         if (!groupDetails || Object.keys(groupDetails).length === 0) {
             console.error('No data found for the provided groupId.');
             alert('No data found for the provided groupId.');
             return;
         }
 
-        console.log('Group Details:', groupDetails);
-
-       
-        
         groupName.value = groupDetails.name || 'N/A';
         genre.value = groupDetails.strGenre || 'N/A';
         established.value = groupDetails.establishedYear || 'N/A';
-
-   
-
-
-
 
         // Populate the artist list
         if (groupDetails.artists && Array.isArray(groupDetails.artists)) {
@@ -70,9 +48,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 artistList.appendChild(li);
             });
         } else {
-            console.error('Artists data is missing or invalid.');
+            console.error('Hittar inte artister i gruppen.');
             const li = document.createElement('li');
-            li.innerText = 'No artists found.';
+            li.innerText = 'Inga artister hittades.';
             artistList.appendChild(li);
         }
 
@@ -93,32 +71,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 albumList.appendChild(li);
             });
         } else {
-            console.error('Albums data is missing or invalid.');
             const li = document.createElement('li');
-            li.innerText = 'No albums found.';
+            li.innerText = 'Inga album hittades.';
             albumList.appendChild(li);
         }
     } catch (error) {
-        console.error('Error fetching group details:', error);
-        alert('An error occurred while fetching group details.');
+        alert('Fel vid hämtning av detaljer, fel: ', error);
     }
 });
-
-
- 
-// let loveAlbumsData = await _service.readAlbumsAsync(0, false, 'love');
-// console.log(loveAlbumsData);
-// for (const album of loveAlbumsData.pageItems) {
-//   const li = document.createElement('li');
-//   li.innerText = album.name;
-//   albumList.appendChild(li);
-// }
-
-
-// let artistsData = await _service.readArtistsAsync(0, false );
-// console.log(artistsData);
-// for (const artist of artistsData.pageItems){
-//   const li = document.createElement('li');
-//   li.innerText = artist.firstName + ' ' + artist.lastName;
-//   artistList.appendChild(li);
-// }
