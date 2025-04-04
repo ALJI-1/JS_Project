@@ -5,15 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
-            "request": "launch",
-            "name": "node.js debugging",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/${relativeFile}"
-        },
-        {
             "type": "chrome",
             "request": "launch",
             "name": "Chrome index.html",
@@ -26,27 +17,6 @@
             "name": "Chrome ../index.html",
             "url": "http://localhost:5501/${relativeFileDirname}/../index.html",
             "webRoot": "${workspaceFolder}"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "AppFinal",
-            "url": "http://localhost:5501/${relativeFileDirname}/../table.html",
-            "webRoot": "${workspaceFolder}"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "React Chrome",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}"
-          },
-          {
-            "type": "msedge",
-            "request": "launch",
-            "name": "Edge index.html",
-            "url": "http://localhost:5502/${relativeFileDirname}/index.html",
-            "webRoot": "${workspaceFolder}"
-          }
+        }
     ]
 }
