@@ -13,7 +13,7 @@ const previousButton = document.querySelector('#prev-btn');
 const pageInfo = document.querySelector('#page-info');
 const searchButton = document.getElementById('search-btn');
 
-let currentPage = 1;
+let currentPage = 1; 
 const itemsPerPage = 10;
 let pageCount = 0;
 
@@ -22,12 +22,16 @@ searchButton.addEventListener('click', clickHandlerSearch); // Om användaren tr
 // Metoden skickar en förfrågan till api med sök input och hämtar de grupper som matchar sökningen
 // EFtersom den kommunicerar med api så använder jag try-catch 
 async function clickHandlerSearch(event) {
-    event.preventDefault();
+
+    // jag använder form-tagg i html för att ta in ett sökord. vanligtvis laddas sidan om direkt (standardbeteende för webläsare) men med preventdefaul 
+    // kan jag istället stanna kvar på sidan, jag kan hämta datan och sidans fylls på asyncront 
+    event.preventDefault(); 
+
     const searchInput = document.getElementById('search-input').value.toLowerCase();
 
     try {
         currentPage = 1; 
-        // Använder en funktion från services. tredje argumentet är de man fått från användaren
+        // Använder en funktion från services. tredje argumentet är de man fått från användaren (sökordet)
         const data = await api.readMusicGroupsAsync(currentPage - 1, false, searchInput, itemsPerPage);
 
         if (data) {
@@ -70,6 +74,9 @@ async function getMusicGroups(searchQuery = null) {
     }
 }
 // Två eventlyssnare för knapparna som byter sida i listan
+// För att kunna bläddra i en lista bara för artister som matchar en sökning så måste vi ha en variabel som kan fånga upp sök-ordet 
+// Om de är vanliga listan så blir den null och getMusicGroups bläddrar blan alla grupper. Om vi har ett sök-ord att förhålla oss till så sätts det 
+// för varje sida i variabeln som skickas in i funktionen getMusicGroups som ger tillbaka nästa sida med grupper som matchar sök-ordet
 nextButton.addEventListener('click', async () => {
     const searchQuery = nextButton.dataset.searchQuery || null;
     if (currentPage < pageCount) {
@@ -77,7 +84,6 @@ nextButton.addEventListener('click', async () => {
         await getMusicGroups(searchQuery);
     }
 });
-
 previousButton.addEventListener('click', async () => {
     const searchQuery = previousButton.dataset.searchQuery || null;
     if (currentPage > 1) {
@@ -86,18 +92,17 @@ previousButton.addEventListener('click', async () => {
     }
 });
 
-// Funktion som skapar ett nytt list-element varje musikgrupp som har hämtats från api, ger den lite styling och lägger till den i listan
+// Funktionen som bygger upp själva sidan i browsern. Den får in rå data från olika ställen beroende vart i programmet du är
+// men dess enda funktion är att den skapar ett nytt list-element varje musikgrupp som har hämtats från api, skapar en knapp för
+// att kunna navigera sig vidare till detaljer, den ger den lite styling och lägger till den i listan. 
 function fillList(musicGroups) {
+
     // Vid varje ny byte av sida med grupper så rensas listan
     clearList();
     musicGroups.forEach((group, index) => {
         const li = document.createElement('li');
         li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-        li.dataset.itemId = group.musicGroupId; // Sparar gruppens id
-
-        if (index % 2 === 0) {// varannan rad ljusare för de estetikska
-            li.classList.add('list-group-item-light');
-        }
+        li.dataset.itemId = group.musicGroupId; // Sparar gruppens id som finns i objektet under namnet musicGroupId
 
         const nameSpan = document.createElement('span');
         nameSpan.innerText = group.name;
@@ -120,7 +125,7 @@ function clearList() {
     }
 }
 
-// Startar sidan genomen att hämta musikgrupper asynkront
+// Startar sidan genomen en iife som hämtar de första musikgrupper asynkront
 (async () => {
     await getMusicGroups();
 })();

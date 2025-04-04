@@ -1,4 +1,8 @@
 'use strict';
+
+// ibland tar de lite tid att ladda all data från api vid första starten
+
+// importerar från min servicemapp och gör alla funktioner tillgängliga 
 import {musicService} from './services/service.js';
 
 (async () => {

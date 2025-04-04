@@ -3,6 +3,7 @@
 
 export function musicService(baseUrl) {
 
+    // MyFetch-funktionen som jag fått från kursmaterialet. Med lite små ändringar
     async function myFetch(url, method = null, body = null) 
     {
         try {
@@ -16,7 +17,6 @@ export function musicService(baseUrl) {
             });
     
             if (res.ok) { 
-                console.log(`${method} Request successful @ ${url}`); 
                 let data = await res.json(); 
                 return data; 
             } 
@@ -26,18 +26,19 @@ export function musicService(baseUrl) {
         } 
         catch (err) 
         { 
-            console.log(`Lyckades inte hämta data från API: ${err.message}`);
             alert(`Lyckades inte hämta data från API: ${err.message}`);
             return null;
         }
     }
+    // Funktionen som tar in sökordet från användaren och sen använder myfetch för att hämta just 
+    // de grupper som mathar ordet. 
     function clickHandlerSearch() {
         const searchInput = document.getElementById('search-input').value.toLowerCase();
         const reqUrl = `${baseUrl}/MusicGroup/Read?flat=true`; 
         myFetch(reqUrl)
-            .then(data => { 
+            .then(data => { // .then bestämmer vad som ska göras efter att myfetch-anropet har kört klart. Finns de data så går vi in i if-satsen
                 if (data) { 
-                    const filteredGroups = data.pageItems.filter(group =>
+                    const filteredGroups = data.pageItems.filter(group => // Här skapas en ny array med .filter som filtrerar så att bara grupper som mathar kommer med
                         group.name.toLowerCase().includes(searchInput)
                     );
                     fillList(filteredGroups);
